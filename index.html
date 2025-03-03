@@ -281,7 +281,7 @@
         <h2 class="coop-header">💰 Profit Margin 🤑</h2>
         <label>Desired Profit Margin (%):</label>
         <input type="number" id="profitMargin" min="0" value="19" step="0.1" 
-               title="This is how much profit you want to make on top of your costs, as a percentage. Example: Enter 20 for a 20% profit margin, meaning if costs are $5/dozen, you’d sell for $6/dozen. Default is 19%.">
+               title="This is how much profit you want to make on top of your costs, as a percentage. Example: Enter 20 for a 20% profit margin, meaning if costs are $5/dozen, you’d sell for $6/dozen. Enter 0 to break even. Default is 19%.">
     </div>
 
     <!-- Buttons -->
@@ -469,8 +469,9 @@
             const incidentalCostPerEgg = totalIncidentalCost / 12;
             const totalCostPerEgg = initialCostPerEgg + chickenCostPerEgg + ongoingCostPerEgg + incidentalCostPerEgg;
             const costPerDozen = totalCostPerEgg * 12;
-            const profitMargin = (parseFloat(document.getElementById('profitMargin').value) || 19) / 100;
-            const sellingPricePerDozen = costPerDozen * (1 + profitMargin);
+            const profitMarginInput = document.getElementById('profitMargin').value;
+            const profitMargin = profitMarginInput === '' || isNaN(parseFloat(profitMarginInput)) ? 19 : parseFloat(profitMarginInput);
+            const sellingPricePerDozen = costPerDozen * (1 + profitMargin / 100);
 
             document.getElementById('result').textContent = `$${sellingPricePerDozen.toFixed(2)}`;
         }
