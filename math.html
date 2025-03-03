@@ -168,24 +168,7 @@
         <label>How many chickens are allowed in your zone? <span class="egg-emoji">📜</span>:</label>
         <input type="number" id="zone" min="0" value="0" 
                title="What’s the legal limit where you live? Example: 6 per local rules."><br>
-        <label>How many chickens did you tell your spouse you’d get? <span class="chicken-emoji">🤫</span>:</label>
-        <input type="number" id="spouse" min="0" value="0" 
-               title="What did you promise your partner? Example: 3 to keep the peace."><br>
-        <label>How many chickens did you see at the feed store? <span class="egg-emoji">🛒</span>:</label>
-        <input type="number" id="store" min="0" value="0" 
-               title="How many cute chicks caught your eye? Example: 5 adorable fluffballs."><br>
-        <label>How many chickens did your kids beg for? <span class="chicken-emoji">👶</span>:</label>
-        <input type="number" id="kids" min="0" value="0" 
-               title="What did the little ones demand? Example: 4 because ‘they’re so cute!’"><br>
-        <label>How many chickens did your neighbor offer? <span class="egg-emoji">🤝</span>:</label>
-        <input type="number" id="neighbor" min="0" value="0" 
-               title="Did your neighbor have extras? Example: 2 they couldn’t keep."><br>
-        <label>How many chickens fit in your car? <span class="chicken-emoji">🚗</span>:</label>
-        <input type="number" id="car" min="0" value="0" 
-               title="How many could you squeeze in on the way home? Example: 6 if you’re creative."><br>
-        <label>How many chickens sounded fun at the time? <span class="egg-emoji">🎉</span>:</label>
-        <input type="number" id="fun" min="0" value="0" 
-               title="How many seemed like a good idea in the moment? Example: 3 for a wild weekend plan."><br>
+        <div id="randomQuestions"></div>
     </div>
 
     <button onclick="calculateChickenMath()">🐔 Do the Chicken Math! 🐓</button>
@@ -197,6 +180,110 @@
     </div>
 
     <script>
+        const quirkyQuestions = [
+            { label: "How many chickens did you tell your spouse you’d get?", emoji: "🤫", tooltip: "What did you promise your partner? Example: 3 to keep the peace." },
+            { label: "How many chickens did you see at the feed store?", emoji: "🛒", tooltip: "How many cute chicks caught your eye? Example: 5 adorable fluffballs." },
+            { label: "How many chickens did your kids beg for?", emoji: "👶", tooltip: "What did the little ones demand? Example: 4 because ‘they’re so cute!’" },
+            { label: "How many chickens did your neighbor offer?", emoji: "🤝", tooltip: "Did your neighbor have extras? Example: 2 they couldn’t keep." },
+            { label: "How many chickens fit in your car?", emoji: "🚗", tooltip: "How many could you squeeze in on the way home? Example: 6 if you’re creative." },
+            { label: "How many chickens sounded fun at the time?", emoji: "🎉", tooltip: "How many seemed like a good idea in the moment? Example: 3 for a wild weekend plan." },
+            { label: "How many chickens did you dream about last night?", emoji: "💤", tooltip: "What did your chicken dreams suggest? Example: 7 from a feathered fantasy." },
+            { label: "How many chickens did your friend brag about?", emoji: "🗣️", tooltip: "What did your buddy boast about? Example: 5 to one-up them." },
+            { label: "How many chickens could you fit in your bathtub?", emoji: "🛁", tooltip: "Imagine a coop emergency! Example: 3 for a splashy backup plan." },
+            { label: "How many chickens did the farmer down the road have?", emoji: "🚜", tooltip: "What did you see nearby? Example: 8 to match the pros." },
+            { label: "How many chickens did you see on that cute video?", emoji: "📱", tooltip: "What did TikTok tempt you with? Example: 4 fluffballs online." },
+            { label: "How many chickens would make your dog jealous?", emoji: "🐶", tooltip: "What would get Fido barking? Example: 5 to stir the pot." },
+            { label: "How many chickens did you bet you could handle?", emoji: "🎲", tooltip: "What did you wager with friends? Example: 6 to win the bet." },
+            { label: "How many chickens did the hatchery flyer show?", emoji: "📬", tooltip: "What did the ad tempt you with? Example: 3 from the mailer." },
+            { label: "How many chickens would fit in your kitchen?", emoji: "🍳", tooltip: "Imagine an indoor flock! Example: 2 for a cozy chaos." },
+            { label: "How many chickens did you plan to name?", emoji: "📛", tooltip: "How many names did you brainstorm? Example: 4 like 'Clucky McFluff'." },
+            { label: "How many chickens did your grandma once have?", emoji: "👵", tooltip: "What’s the family legacy? Example: 6 from her stories." },
+            { label: "How many chickens would impress your in-laws?", emoji: "👪", tooltip: "What would win family approval? Example: 5 for bragging rights." },
+            { label: "How many chickens did you see in that movie?", emoji: "🎬", tooltip: "What did Hollywood inspire? Example: 3 from a farm flick." },
+            { label: "How many chickens would fit on your porch?", emoji: "🏠", tooltip: "What’s your outdoor limit? Example: 4 for a porch party." },
+            { label: "How many chickens did you hear clucking nearby?", emoji: "👂", tooltip: "What did your ears pick up? Example: 2 from next door." },
+            { label: "How many chickens would make a good story?", emoji: "📖", tooltip: "What’s worth telling? Example: 7 for a wild tale." },
+            { label: "How many chickens did you sketch on that napkin?", emoji: "✏️", tooltip: "What did you doodle? Example: 3 during lunch." },
+            { label: "How many chickens did your cousin swear by?", emoji: "👨‍🌾", tooltip: "What did family recommend? Example: 5 from their farm." },
+            { label: "How many chickens would fit in your shed?", emoji: "🛖", tooltip: "What’s your backup space? Example: 4 if you clear it out." },
+            { label: "How many chickens did you see in that ad?", emoji: "📺", tooltip: "What did the commercial show? Example: 3 tempting you." },
+            { label: "How many chickens would cheer you up?", emoji: "😊", tooltip: "What’s your happiness count? Example: 2 for a quick boost." },
+            { label: "How many chickens did you count at the fair?", emoji: "🎡", tooltip: "What did you see last summer? Example: 6 prize winners." },
+            { label: "How many chickens would your cat tolerate?", emoji: "🐱", tooltip: "What’s feline-approved? Example: 3 before chaos." },
+            { label: "How many chickens did you plan for Easter?", emoji: "🐣", tooltip: "What did spring inspire? Example: 4 for egg hunts." },
+            { label: "How many chickens did you see in that book?", emoji: "📚", tooltip: "What did you read about? Example: 5 from a farm tale." },
+            { label: "How many chickens would fit in your garage?", emoji: "🚘", tooltip: "What’s your car’s coop limit? Example: 6 if you park outside." },
+            { label: "How many chickens did your boss mention?", emoji: "💼", tooltip: "What did work chatter suggest? Example: 3 from a random convo." },
+            { label: "How many chickens would your garden handle?", emoji: "🌱", tooltip: "What’s your yard’s limit? Example: 4 before it’s a mess." },
+            { label: "How many chickens did you hear on that podcast?", emoji: "🎙️", tooltip: "What did you listen to? Example: 5 from a farm show." },
+            { label: "How many chickens would make a TikTok hit?", emoji: "📹", tooltip: "What’s viral-worthy? Example: 7 for clucking fame." },
+            { label: "How many chickens did you see at the pet store?", emoji: "🐾", tooltip: "What did you spot shopping? Example: 3 surprise chicks." },
+            { label: "How many chickens would your porch swing hold?", emoji: "🪑", tooltip: "What’s your swing’s limit? Example: 2 for a cozy perch." },
+            { label: "How many chickens did you plan for Christmas?", emoji: "🎄", tooltip: "What did winter dreams include? Example: 4 for holiday cheer." },
+            { label: "How many chickens did your uncle once raise?", emoji: "👴", tooltip: "What’s the family legend? Example: 6 from his tales." },
+            { label: "How many chickens would your fence contain?", emoji: "🪵", tooltip: "What’s your boundary limit? Example: 5 before escapees." },
+            { label: "How many chickens did you see in that dream coop?", emoji: "🏡", tooltip: "What’s your fantasy flock? Example: 8 in a perfect world." },
+            { label: "How many chickens would your mailbox hold?", emoji: "📮", tooltip: "What’s the silliest limit? Example: 1 for a tiny coop." },
+            { label: "How many chickens did you count at the park?", emoji: "🌳", tooltip: "What did you spot outdoors? Example: 3 wandering free." },
+            { label: "How many chickens would your BBQ impress?", emoji: "🍔", tooltip: "What’s grill-party worthy? Example: 4 for a feast." },
+            { label: "How many chickens did your aunt recommend?", emoji: "👩", tooltip: "What did she suggest? Example: 5 from her wisdom." },
+            { label: "How many chickens would your bike basket hold?", emoji: "🚲", tooltip: "What’s your ride’s limit? Example: 2 for a quick trip." },
+            { label: "How many chickens did you see in that painting?", emoji: "🎨", tooltip: "What did art inspire? Example: 3 from a farm scene." },
+            { label: "How many chickens would your hammock support?", emoji: "🛌", tooltip: "What’s your nap spot’s limit? Example: 2 for a lazy day." },
+            { label: "How many chickens did you plan for next year?", emoji: "📅", tooltip: "What’s your future flock? Example: 4 for a big plan." },
+            { label: "How many chickens did your barber talk about?", emoji: "💈", tooltip: "What did chit-chat suggest? Example: 3 from a haircut tale." },
+            { label: "How many chickens would your closet hide?", emoji: "👕", tooltip: "What’s your secret stash? Example: 2 for a sneaky coop." },
+            { label: "How many chickens did you see in that game?", emoji: "🎮", tooltip: "What did gaming inspire? Example: 5 from a farm sim." },
+            { label: "How many chickens would your picnic table seat?", emoji: "🍽️", tooltip: "What’s your outdoor dining limit? Example: 4 for a feast." },
+            { label: "How many chickens did your coworker mention?", emoji: "👩‍💼", tooltip: "What did office talk suggest? Example: 3 from a random chat." },
+            { label: "How many chickens would your tent shelter?", emoji: "⛺", tooltip: "What’s your camping coop? Example: 2 for a night out." },
+            { label: "How many chickens did you see in that magazine?", emoji: "📰", tooltip: "What did you flip through? Example: 4 from a farm feature." },
+            { label: "How many chickens would your pool float hold?", emoji: "🏊", tooltip: "What’s your summer limit? Example: 3 for a splashy ride." },
+            { label: "How many chickens did your dentist recommend?", emoji: "🦷", tooltip: "What did checkup chat suggest? Example: 2 from a wild convo." },
+            { label: "How many chickens would your balcony fit?", emoji: "🏢", tooltip: "What’s your urban limit? Example: 3 for a city coop." },
+            { label: "How many chickens did you see in that cartoon?", emoji: "📺", tooltip: "What did TV inspire? Example: 4 from a silly show." },
+            { label: "How many chickens would your couch accommodate?", emoji: "🛋️", tooltip: "What’s your indoor limit? Example: 2 for a cozy perch." },
+            { label: "How many chickens did your mail carrier mention?", emoji: "📦", tooltip: "What did delivery chat suggest? Example: 3 from a package drop." },
+            { label: "How many chickens would your kayak carry?", emoji: "🚣", tooltip: "What’s your water limit? Example: 2 for a paddle pal." },
+            { label: "How many chickens did you see in that photo?", emoji: "📷", tooltip: "What did a snapshot show? Example: 4 from a farm pic." },
+            { label: "How many chickens would your ladder reach?", emoji: "🪜", tooltip: "What’s your height limit? Example: 3 for a rooftop coop." },
+            { label: "How many chickens did your teacher talk about?", emoji: "📝", tooltip: "What did school inspire? Example: 2 from a lesson." },
+            { label: "How many chickens would your fridge store?", emoji: "🧀", tooltip: "What’s your cold coop? Example: 1 for a chilly chick." },
+            { label: "How many chickens did you see in that dream?", emoji: "🌙", tooltip: "What did sleep suggest? Example: 5 from a night vision." },
+            { label: "How many chickens would your fence gate allow?", emoji: "🚪", tooltip: "What’s your entry limit? Example: 4 for a grand entrance." },
+            { label: "How many chickens did your grocer mention?", emoji: "🛍️", tooltip: "What did shopping chat suggest? Example: 3 from a store run." },
+            { label: "How many chickens would your attic house?", emoji: "🏚️", tooltip: "What’s your upper limit? Example: 5 for a dusty coop." },
+            { label: "How many chickens did you see in that mural?", emoji: "🖼️", tooltip: "What did art tempt? Example: 4 from a wall scene." },
+            { label: "How many chickens would your sled pull?", emoji: "🛷", tooltip: "What’s your winter limit? Example: 3 for a snowy ride." },
+            { label: "How many chickens did your pastor mention?", emoji: "⛪", tooltip: "What did sermon chat suggest? Example: 2 from a holy tale." },
+            { label: "How many chickens would your roof support?", emoji: "🏠", tooltip: "What’s your high limit? Example: 6 for a rooftop flock." },
+            { label: "How many chickens did you see in that parade?", emoji: "🎭", tooltip: "What did the march show? Example: 4 strutting by." },
+            { label: "How many chickens would your canoe carry?", emoji: "🛶", tooltip: "What’s your paddle limit? Example: 2 for a water trip." },
+            { label: "How many chickens did your lawyer suggest?", emoji: "⚖️", tooltip: "What did legal chat inspire? Example: 3 from a consult." },
+            { label: "How many chickens would your desk hold?", emoji: "🖥️", tooltip: "What’s your work limit? Example: 2 for an office coop." },
+            { label: "How many chickens did you see in that zoo?", emoji: "🦒", tooltip: "What did the visit show? Example: 5 from a farm exhibit." },
+            { label: "How many chickens would your wagon haul?", emoji: "🛒", tooltip: "What’s your pull limit? Example: 4 for a big load." },
+            { label: "How many chickens did your poet write about?", emoji: "📜", tooltip: "What did verse suggest? Example: 3 from a rhyme." },
+            { label: "How many chickens would your boat float?", emoji: "⛵", tooltip: "What’s your sea limit? Example: 5 for a sailing coop." },
+            { label: "How many chickens did you see in that play?", emoji: "🎭", tooltip: "What did theater inspire? Example: 4 from a farm act." },
+            { label: "How many chickens would your shelf stack?", emoji: "📚", tooltip: "What’s your storage limit? Example: 3 for a book coop." },
+            { label: "How many chickens did your baker mention?", emoji: "🥐", tooltip: "What did bakery chat suggest? Example: 2 from a bread run." },
+            { label: "How many chickens would your rug warm?", emoji: "🧺", tooltip: "What’s your floor limit? Example: 4 for a cozy spot." },
+            { label: "How many chickens did you see in that song?", emoji: "🎵", tooltip: "What did lyrics inspire? Example: 3 from a clucking tune." },
+            { label: "How many chickens would your cart tow?", emoji: "🛒", tooltip: "What’s your shopping limit? Example: 5 for a big haul." },
+            { label: "How many chickens did your tailor count?", emoji: "✂️", tooltip: "What did sewing chat suggest? Example: 2 from a fitting." },
+            { label: "How many chickens would your stairs climb?", emoji: "🪜", tooltip: "What’s your step limit? Example: 3 for an upstairs coop." },
+            { label: "How many chickens did you see in that ad?", emoji: "📺", tooltip: "What did TV tempt? Example: 4 from a commercial break." },
+            { label: "How many chickens would your lamp shade?", emoji: "💡", tooltip: "What’s your light limit? Example: 2 for a glowing coop." },
+            { label: "How many chickens did your pilot mention?", emoji: "✈️", tooltip: "What did flight chat suggest? Example: 3 from a sky story." },
+            { label: "How many chickens would your pond host?", emoji: "🌊", tooltip: "What’s your water limit? Example: 5 for a duck-like flock." },
+            { label: "How many chickens did you see in that race?", emoji: "🏁", tooltip: "What did speed inspire? Example: 4 from a clucking dash." },
+            { label: "How many chickens would your bag carry?", emoji: "🎒", tooltip: "What’s your pack limit? Example: 2 for a sneaky stash." },
+            { label: "How many chickens did your chef cook for?", emoji: "👨‍🍳", tooltip: "What did kitchen chat suggest? Example: 3 from a recipe." },
+            { label: "How many chickens would your treehouse hold?", emoji: "🌳", tooltip: "What’s your treetop limit? Example: 4 for a high coop." },
+            { label: "How many chickens did you see in that cloud?", emoji: "☁️", tooltip: "What did the sky imagine? Example: 5 from a fluffy vision." }
+        ];
+
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
             const button = document.getElementById('themeToggle');
@@ -206,7 +293,7 @@
         }
 
         function getRandomMultiplier() {
-            return 1 + Math.random(); // Random float between 1 and 2 (exclusive of 2)
+            return 1 + Math.random();
         }
 
         function parseInput(input, defaultValue) {
@@ -214,19 +301,31 @@
             return input === '' || isNaN(value) ? defaultValue : value;
         }
 
+        function loadRandomQuestions() {
+            const container = document.getElementById('randomQuestions');
+            container.innerHTML = '';
+            const shuffled = quirkyQuestions.sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, 6); // Pick 6 random questions
+            selected.forEach((q, i) => {
+                const index = i + 4; // Start IDs after the 4 fixed ones
+                container.innerHTML += `
+                    <label>${q.label} <span class="${q.emoji === '🐔' || q.emoji === '🐓' ? 'chicken-emoji' : 'egg-emoji'}">${q.emoji}</span>:</label>
+                    <input type="number" id="random${index}" min="0" value="0" title="${q.tooltip}"><br>
+                `;
+            });
+        }
+
         function calculateChickenMath() {
-            const inputs = [
+            const fixedInputs = [
                 parseInput(document.getElementById('need').value, 0),
                 parseInput(document.getElementById('have').value, 0),
                 parseInput(document.getElementById('coop').value, 0),
-                parseInput(document.getElementById('zone').value, 0),
-                parseInput(document.getElementById('spouse').value, 0),
-                parseInput(document.getElementById('store').value, 0),
-                parseInput(document.getElementById('kids').value, 0),
-                parseInput(document.getElementById('neighbor').value, 0),
-                parseInput(document.getElementById('car').value, 0),
-                parseInput(document.getElementById('fun').value, 0)
+                parseInput(document.getElementById('zone').value, 0)
             ];
+            const randomInputs = Array.from({ length: 6 }, (_, i) => 
+                parseInput(document.getElementById(`random${i + 4}`)?.value, 0)
+            );
+            const inputs = [...fixedInputs, ...randomInputs];
 
             const chickenMathTotal = inputs.reduce((sum, count) => {
                 const multiplied = count * getRandomMultiplier();
@@ -242,6 +341,7 @@
                 document.body.classList.add('dark-mode');
                 document.getElementById('themeToggle').textContent = '🐣 Light Mode ☀️';
             }
+            loadRandomQuestions();
         };
     </script>
 </body>
