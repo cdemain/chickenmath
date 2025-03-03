@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐔 Chicken Math Madness 🐓</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Chicken+Pie&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Chicken Pie', 'Poppins', Arial, sans-serif;
+            margin: 20px;
+            transition: background-color 0.3s, color 0.3s;
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            background-color: #fff7d1;
+            color: #4a2c0a;
+            overflow-x: hidden;
+        }
+        .dark-mode {
+            background-color: #1a0f03;
+            color: #fff7d1;
+        }
+        .section {
+            margin-bottom: 20px;
+            background: rgba(255, 230, 153, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 3px dashed #e67300;
+            position: relative;
+        }
+        .dark-mode .section {
+            background: rgba(74, 44, 10, 0.9);
+            border-color: #ff9900;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #ff9900;
+            color: #fff7d1;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        button:hover {
+            background-color: #ffcc00;
+            transform: scale(1.1);
+        }
+        .dark-mode button {
+            background-color: #e67300;
+        }
+        .dark-mode button:hover {
+            background-color: #ff9900;
+        }
+        label {
+            display: inline-block;
+            width: 400px;
+            font-weight: bold;
+            color: #8c5523;
+            font-family: 'Poppins', Arial, sans-serif;
+        }
+        .dark-mode label {
+            color: #ffcc00;
+        }
+        input {
+            margin-bottom: 15px;
+            padding: 8px;
+            border-radius: 8px;
+            border: 2px solid #ff9900;
+            background: #fff7d1;
+            font-size: 16px;
+            font-family: 'Poppins', Arial, sans-serif;
+            width: 100px;
+        }
+        .dark-mode input {
+            border-color: #e67300;
+            background: #3f2606;
+            color: #fff7d1;
+        }
+        h1 {
+            color: #e67300;
+            text-align: center;
+            font-size: 40px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+        }
+        .dark-mode h1 {
+            color: #ffcc00;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+        }
+        h2 {
+            color: #ff9900;
+            font-size: 28px;
+            margin-top: 0;
+            display: inline-block;
+        }
+        .dark-mode h2 {
+            color: #ffcc00;
+        }
+        #themeToggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 1000;
+        }
+        .chicken-emoji {
+            font-size: 28px;
+            margin: 0 8px;
+            animation: peck 1s infinite;
+        }
+        .egg-emoji {
+            font-size: 24px;
+            margin: 0 8px;
+            animation: wobble 2s infinite;
+        }
+        @keyframes peck {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(15deg); }
+        }
+        @keyframes wobble {
+            0%, 100% { transform: translateY(0); }
+            25% { transform: translateY(-5px); }
+            75% { transform: translateY(5px); }
+        }
+        .coop-header::before {
+            content: "🐓";
+            font-size: 32px;
+            position: absolute;
+            top: -25px;
+            left: 10px;
+            animation: strut 3s infinite;
+        }
+        .coop-header::after {
+            content: "🐔";
+            font-size: 28px;
+            position: absolute;
+            top: -20px;
+            right: 10px;
+            animation: strut 3s infinite reverse;
+        }
+        @keyframes strut {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+    </style>
+</head>
+<body>
+    <button id="themeToggle" onclick="toggleTheme()">🐾 Dark Mode 🌙</button>
+    <h1>🐔 Chicken Math Madness 🐓</h1>
+
+    <div class="section">
+        <h2 class="coop-header">🐣 Enter Your Chicken Dreams 🐥</h2>
+        <p>Chicken Math: Where you want 3, plan for 4, and end up with 12! Enter numbers below, and watch the flock grow!</p>
+        <label>How many chickens do you need? <span class="chicken-emoji">🐔</span>:</label>
+        <input type="number" id="need" min="0" value="0" 
+               title="How many chickens do you actually need for eggs or company? Example: 3 for a small family."><br>
+        <label>How many chickens do you have? <span class="chicken-emoji">🐓</span>:</label>
+        <input type="number" id="have" min="0" value="0" 
+               title="How many chickens are clucking around your yard right now? Example: 2 you just couldn’t resist."><br>
+        <label>How many chickens can your coop support? <span class="egg-emoji">🏡</span>:</label>
+        <input type="number" id="coop" min="0" value="0" 
+               title="What’s the max your coop can handle? Example: 4 if it’s a cozy little setup."><br>
+        <label>How many chickens are allowed in your zone? <span class="egg-emoji">📜</span>:</label>
+        <input type="number" id="zone" min="0" value="0" 
+               title="What’s the legal limit where you live? Example: 6 per local rules."><br>
+        <label>How many chickens did you tell your spouse you’d get? <span class="chicken-emoji">🤫</span>:</label>
+        <input type="number" id="spouse" min="0" value="0" 
+               title="What did you promise your partner? Example: 3 to keep the peace."><br>
+        <label>How many chickens did you see at the feed store? <span class="egg-emoji">🛒</span>:</label>
+        <input type="number" id="store" min="0" value="0" 
+               title="How many cute chicks caught your eye? Example: 5 adorable fluffballs."><br>
+        <label>How many chickens did your kids beg for? <span class="chicken-emoji">👶</span>:</label>
+        <input type="number" id="kids" min="0" value="0" 
+               title="What did the little ones demand? Example: 4 because ‘they’re so cute!’"><br>
+        <label>How many chickens did your neighbor offer? <span class="egg-emoji">🤝</span>:</label>
+        <input type="number" id="neighbor" min="0" value="0" 
+               title="Did your neighbor have extras? Example: 2 they couldn’t keep."><br>
+        <label>How many chickens fit in your car? <span class="chicken-emoji">🚗</span>:</label>
+        <input type="number" id="car" min="0" value="0" 
+               title="How many could you squeeze in on the way home? Example: 6 if you’re creative."><br>
+        <label>How many chickens sounded fun at the time? <span class="egg-emoji">🎉</span>:</label>
+        <input type="number" id="fun" min="0" value="0" 
+               title="How many seemed like a good idea in the moment? Example: 3 for a wild weekend plan."><br>
+    </div>
+
+    <button onclick="calculateChickenMath()">🐔 Do the Chicken Math! 🐓</button>
+
+    <div class="section">
+        <h2 class="coop-header">🎉 Your Chicken Math Total 🐤</h2>
+        <p>Total Chickens You’ll End Up With: <span id="result" class="chicken-emoji">0</span> <span class="egg-emoji">🐔</span></p>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const button = document.getElementById('themeToggle');
+            button.textContent = document.body.classList.contains('dark-mode') ? 
+                '🐣 Light Mode ☀️' : '🐾 Dark Mode 🌙';
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        }
+
+        function getRandomMultiplier() {
+            return 1 + Math.random(); // Random float between 1 and 2 (exclusive of 2)
+        }
+
+        function parseInput(input, defaultValue) {
+            const value = parseFloat(input);
+            return input === '' || isNaN(value) ? defaultValue : value;
+        }
+
+        function calculateChickenMath() {
+            const inputs = [
+                parseInput(document.getElementById('need').value, 0),
+                parseInput(document.getElementById('have').value, 0),
+                parseInput(document.getElementById('coop').value, 0),
+                parseInput(document.getElementById('zone').value, 0),
+                parseInput(document.getElementById('spouse').value, 0),
+                parseInput(document.getElementById('store').value, 0),
+                parseInput(document.getElementById('kids').value, 0),
+                parseInput(document.getElementById('neighbor').value, 0),
+                parseInput(document.getElementById('car').value, 0),
+                parseInput(document.getElementById('fun').value, 0)
+            ];
+
+            const chickenMathTotal = inputs.reduce((sum, count) => {
+                const multiplied = count * getRandomMultiplier();
+                return sum + Math.ceil(multiplied); // Round up to the nearest whole chicken
+            }, 0);
+
+            document.getElementById('result').textContent = chickenMathTotal;
+        }
+
+        window.onload = () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('themeToggle').textContent = '🐣 Light Mode ☀️';
+            }
+        };
+    </script>
+</body>
+</html>
