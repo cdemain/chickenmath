@@ -6,16 +6,13 @@ st.title("Backyard Egg Price Calculator")
 # Initial Setup Costs
 st.header("Initial Setup Costs")
 initial_cost = 3000  # Fixed initial cost
-st.write(f"Initial Expenses ($3,000 amortized over 10 years): ${initial_cost}")
-amortized_initial_weekly = initial_cost / 10 / 52  # Weekly cost
-st.write(f"Annual Amortized Cost: ${initial_cost / 10:.2f}/year (~${amortized_initial_weekly:.2f}/week)")
+st.write(f"Initial Expenses ($3,000 to be recouped over 10 years): ${initial_cost}")
 
 # Chicken Details
 st.header("Chickens")
 chicken_count = st.number_input("Number of Chickens", min_value=1, value=1, step=1)
 
 chickens = []
-total_chicken_cost_weekly = 0
 total_eggs_per_week = 0
 
 for i in range(chicken_count):
@@ -29,7 +26,6 @@ for i in range(chicken_count):
         rate = st.number_input(f"Egg Production Rate - Chicken {i + 1}", min_value=0.0, value=0.0, key=f"rate_{i}")
     
     chickens.append({"name": name, "breed": breed, "cost": cost, "rate": rate})
-    total_chicken_cost_weekly += cost / 3 / 52  # Amortized weekly
     total_eggs_per_week += rate  # Will adjust based on unit below
 
 # Egg Production Rate Unit
@@ -38,7 +34,22 @@ rate_unit = st.selectbox("Rate Unit", ["Per Week", "Per Year"])
 if rate_unit == "Per Year":
     total_eggs_per_week = total_eggs_per_week / 52  # Convert to weekly
 
-# Ongoing Expenses
+# Calculate total eggs over relevant periods
+total_eggs_3_years = total_eggs_per_week * 52 * 3  # For chicken costs (3-year amortization)
+total_eggs_10_years = total_eggs_per_week * 52 * 10  # For initial cost (10-year amortization)
+st.write(f"Estimated Eggs over 3 Years (for chicken costs): {total_eggs_3_years:.0f}")
+st.write(f"Estimated Eggs over 10 Years (for initial cost): {total_eggs_10_years:.0f}")
+
+# Per-egg cost from initial investment
+initial_cost_per_egg = initial_cost / total_eggs_10_years if total_eggs_10_years > 0 else 0
+st.write(f"Initial Cost per Egg: ${initial_cost_per_egg:.4f}")
+
+# Per-egg cost from chickens
+total_chicken_cost = sum(chicken["cost"] for chicken in chickens)
+chicken_cost_per_egg = total_chicken_cost / total_eggs_3_years if total_eggs_3_years > 0 else 0
+st.write(f"Chicken Cost per Egg (amortized over 3 years): ${chicken_cost_per_egg:.4f}")
+
+# Ongoing Expenses (converted to per egg)
 st.header("Ongoing Expenses")
 def get_weekly_cost(label, key_prefix):
     col1, col2 = st.columns([2, 1])
@@ -52,13 +63,18 @@ def get_weekly_cost(label, key_prefix):
         return cost / 52
     return cost
 
-feed_cost = get_weekly_cost("Feed", "feed")
-gravel_cost = get_weekly_cost("Gravel", "gravel")
-oyster_shell_cost = get_weekly_cost("Oyster Shell", "oyster")
-nesting_cost = get_weekly_cost("Nesting Box Pads", "nesting")
-coop_lining_cost = get_weekly_cost("Coop Lining", "coop")
+feed_cost_weekly = get_weekly_cost("Feed", "feed")
+gravel_cost_weekly = get_weekly_cost("Gravel", "gravel")
+oyster_shell_cost_weekly = get_weekly_cost("Oyster Shell", "oyster")
+nesting_cost_weekly = get_weekly_cost("Nesting Box Pads", "nesting")
+coop_lining_cost_weekly = get_weekly_cost("Coop Lining", "coop")
 
-# Sale Incidentals
+total_ongoing_weekly = (feed_cost_weekly + gravel_cost_weekly + oyster_shell_cost_weekly + 
+                        nesting_cost_weekly + coop_lining_cost_weekly)
+ongoing_cost_per_egg = total_ongoing_weekly / total_eggs_per_week if total_eggs_per_week > 0 else 0
+st.write(f"Ongoing Cost per Egg: ${ongoing_cost_per_egg:.4f}")
+
+# Sale Incidentals (per egg)
 st.header("Sale Incidentals")
 def get_carton_cost(label, key_prefix):
     col1, col2 = st.columns([2, 1])
@@ -72,8 +88,10 @@ def get_carton_cost(label, key_prefix):
         return cost / 100
     return cost
 
-carton_cost = get_carton_cost("Egg Carton", "carton")
-stamp_cost = get_carton_cost("Stamp/Ink", "stamp")
+carton_cost_per_carton = get_carton_cost("Egg Carton", "carton")
+stamp_cost_per_carton = get_carton_cost("Stamp/Ink", "stamp")
+incidental_cost_per_egg = (carton_cost_per_carton + stamp_cost_per_carton) / 12  # Per egg in a dozen
+st.write(f"Incidental Cost per Egg (carton + stamp): ${incidental_cost_per_egg:.4f}")
 
 # Profit Margin
 st.header("Profit Margin")
@@ -81,22 +99,20 @@ profit_margin = st.number_input("Desired Profit Margin (%)", min_value=0.0, valu
 
 # Calculate Selling Price
 if st.button("Calculate Selling Price"):
-    # Total weekly cost
-    total_weekly_cost = (amortized_initial_weekly + total_chicken_cost_weekly + 
-                         feed_cost + gravel_cost + oyster_shell_cost + nesting_cost + coop_lining_cost)
+    # Total cost per egg
+    total_cost_per_egg = (initial_cost_per_egg + chicken_cost_per_egg + 
+                          ongoing_cost_per_egg + incidental_cost_per_egg)
     
-    # Cost per egg
-    cost_per_egg = total_weekly_cost / total_eggs_per_week if total_eggs_per_week > 0 else 0
-    incidental_cost_per_egg = (carton_cost + stamp_cost) / 12  # Per egg in a dozen
-    
-    # Total cost per dozen
-    cost_per_dozen = (cost_per_egg + incidental_cost_per_egg) * 12
+    # Cost per dozen
+    cost_per_dozen = total_cost_per_egg * 12
     
     # Selling price with profit margin
     selling_price_per_dozen = cost_per_dozen * (1 + profit_margin / 100)
     
     # Display result
     st.header("Result")
-    st.write(f"Selling Price per Dozen: ${selling_price_per_dozen:.2f}")
+    st.write(f"Total Cost per Egg: ${total_cost_per_egg:.4f}")
+    st.write(f"Cost per Dozen: ${cost_per_dozen:.2f}")
+    st.write(f"Selling Price per Dozen (with {profit_margin}% margin): ${selling_price_per_dozen:.2f}")
 else:
     st.write("Click 'Calculate Selling Price' to see the result.")
