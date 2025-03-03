@@ -5,8 +5,9 @@ st.title("Backyard Egg Price Calculator")
 
 # Initial Setup Costs
 st.header("Initial Setup Costs")
-initial_cost = 3000  # Fixed initial cost
-st.write(f"Initial Expenses ($3,000 to be recouped over 10 years): ${initial_cost}")
+initial_cost = st.number_input("Initial Investment ($ to be recouped over 10 years)", 
+                               min_value=0.0, value=3000.0, step=10.0)
+st.write(f"Initial Investment: ${initial_cost:.2f}")
 
 # Chicken Details
 st.header("Chickens")
@@ -51,10 +52,10 @@ st.write(f"Chicken Cost per Egg (amortized over 3 years): ${chicken_cost_per_egg
 
 # Ongoing Expenses (converted to per egg)
 st.header("Ongoing Expenses")
-def get_weekly_cost(label, key_prefix):
+def get_weekly_cost(label, key_prefix, default_value=0.0):
     col1, col2 = st.columns([2, 1])
     with col1:
-        cost = st.number_input(f"{label} Cost", min_value=0.0, value=0.0, key=f"{key_prefix}_cost")
+        cost = st.number_input(f"{label} Cost", min_value=0.0, value=default_value, key=f"{key_prefix}_cost")
     with col2:
         unit = st.selectbox("Unit", ["Per Week", "Per Month", "Per Year"], key=f"{key_prefix}_unit")
     if unit == "Per Month":
@@ -63,11 +64,11 @@ def get_weekly_cost(label, key_prefix):
         return cost / 52
     return cost
 
-feed_cost_weekly = get_weekly_cost("Feed", "feed")
-gravel_cost_weekly = get_weekly_cost("Gravel", "gravel")
-oyster_shell_cost_weekly = get_weekly_cost("Oyster Shell", "oyster")
-nesting_cost_weekly = get_weekly_cost("Nesting Box Pads", "nesting")
-coop_lining_cost_weekly = get_weekly_cost("Coop Lining", "coop")
+feed_cost_weekly = get_weekly_cost("Feed", "feed", 0.0)
+gravel_cost_weekly = get_weekly_cost("Gravel", "gravel", 0.0)
+oyster_shell_cost_weekly = get_weekly_cost("Oyster Shell", "oyster", 0.0)
+nesting_cost_weekly = get_weekly_cost("Nesting Box Pads", "nesting", 0.0)
+coop_lining_cost_weekly = get_weekly_cost("Coop Lining", "coop", 0.0)
 
 total_ongoing_weekly = (feed_cost_weekly + gravel_cost_weekly + oyster_shell_cost_weekly + 
                         nesting_cost_weekly + coop_lining_cost_weekly)
@@ -76,10 +77,10 @@ st.write(f"Ongoing Cost per Egg: ${ongoing_cost_per_egg:.4f}")
 
 # Sale Incidentals (per egg)
 st.header("Sale Incidentals")
-def get_carton_cost(label, key_prefix):
+def get_carton_cost(label, key_prefix, default_value=0.0):
     col1, col2 = st.columns([2, 1])
     with col1:
-        cost = st.number_input(f"{label} Cost", min_value=0.0, value=0.0, key=f"{key_prefix}_cost")
+        cost = st.number_input(f"{label} Cost", min_value=0.0, value=default_value, key=f"{key_prefix}_cost")
     with col2:
         unit = st.selectbox("Unit", ["Per Carton", "Per 10 Cartons", "Per 100 Cartons"], key=f"{key_prefix}_unit")
     if unit == "Per 10 Cartons":
@@ -88,8 +89,8 @@ def get_carton_cost(label, key_prefix):
         return cost / 100
     return cost
 
-carton_cost_per_carton = get_carton_cost("Egg Carton", "carton")
-stamp_cost_per_carton = get_carton_cost("Stamp/Ink", "stamp")
+carton_cost_per_carton = get_carton_cost("Egg Carton", "carton", 0.0)
+stamp_cost_per_carton = get_carton_cost("Stamp/Ink", "stamp", 0.0)
 incidental_cost_per_egg = (carton_cost_per_carton + stamp_cost_per_carton) / 12  # Per egg in a dozen
 st.write(f"Incidental Cost per Egg (carton + stamp): ${incidental_cost_per_egg:.4f}")
 
