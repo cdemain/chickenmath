@@ -32,7 +32,7 @@
             background: rgba(74, 44, 10, 0.9);
             border-color: #ff9900;
         }
-        .chicken-entry, .custom-expense {
+        .chicken-entry, .custom-expense, .custom-incidental {
             border: 3px solid #ff9900;
             padding: 15px;
             margin-bottom: 15px;
@@ -40,7 +40,7 @@
             background: #fff0b3;
             position: relative;
         }
-        .dark-mode .chicken-entry, .dark-mode .custom-expense {
+        .dark-mode .chicken-entry, .dark-mode .custom-expense, .dark-mode .custom-incidental {
             border-color: #e67300;
             background: #3f2606;
         }
@@ -261,24 +261,19 @@
     <!-- Sale Incidentals -->
     <div class="section">
         <h2 class="coop-header">📦 Sale Incidentals 🥚</h2>
-        <label>Egg Carton Cost <span class="egg-emoji">📦</span>:</label>
-        <input type="number" id="cartonCost" min="0" value="0" 
-               title="This is what you spend on egg cartons. Example: If you buy cartons at $0.25 each, enter 0.25 and choose 'Per Carton'. Or if $25 for 100, enter 25 and choose 'Per 100 Cartons'.">
-        <select id="cartonUnit" 
-                title="Choose how your carton cost is measured—per single carton, per 10, or per 100 cartons.">
-            <option value="perCarton">Per Carton</option>
-            <option value="per10">Per 10 Cartons</option>
-            <option value="per100">Per 100 Cartons</option>
-        </select><br>
-        <label>Stamp/Ink Cost <span class="egg-emoji">✒️</span>:</label>
-        <input type="number" id="stampCost" min="0" value="0" 
-               title="Enter the cost of stamps or ink for labeling cartons. Example: If a stamp costs $0.05 per carton, enter 0.05 and choose 'Per Carton'. Or $5 for ink every 100 cartons, enter 5 and choose 'Per 100 Cartons'.">
-        <select id="stampUnit" 
-                title="Select how your stamp/ink cost is measured—per single carton, per 10, or per 100 cartons.">
-            <option value="perCarton">Per Carton</option>
-            <option value="per10">Per 10 Cartons</option>
-            <option value="per100">Per 100 Cartons</option>
-        </select>
+        <div id="fixedIncidentals">
+            <label>Egg Carton Cost <span class="egg-emoji">📦</span>:</label>
+            <input type="number" id="cartonCost" min="0" value="0" 
+                   title="This is what you spend on egg cartons. Example: If you buy cartons at $0.25 each, enter 0.25 and choose 'Per Carton'. Or if $25 for 100, enter 25 and choose 'Per 100 Cartons'.">
+            <select id="cartonUnit" 
+                    title="Choose how your carton cost is measured—per single carton, per 10, or per 100 cartons.">
+                <option value="perCarton">Per Carton</option>
+                <option value="per10">Per 10 Cartons</option>
+                <option value="per100">Per 100 Cartons</option>
+            </select><br>
+        </div>
+        <div id="customIncidentals"></div>
+        <button class="add-button" onclick="addCustomIncidental()">➕ Add Sale Incidental 🥚</button>
     </div>
 
     <!-- Profit Margin -->
@@ -316,6 +311,7 @@
         };
 
         let customExpenseCount = 0;
+        let customIncidentalCount = 0;
 
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
@@ -403,6 +399,27 @@
             `;
         }
 
+        function addCustomIncidental() {
+            const container = document.getElementById('customIncidentals');
+            const index = customIncidentalCount++;
+            container.innerHTML += `
+                <div class="custom-incidental" id="customIncidental${index}">
+                    <label>Custom Incidental Name <span class="egg-emoji">🥚</span>:</label>
+                    <input type="text" id="customIncidentalName${index}" placeholder="e.g., Stamp/Ink" 
+                           title="Name your custom sale incidental—any extra cost tied to selling eggs, like 'Stamp/Ink' for labeling, 'Labels', or 'Market Fees'. Add 'Stamp/Ink' here if you use it!"><br>
+                    <label>Cost <span class="egg-emoji">💸</span>:</label>
+                    <input type="number" id="customIncidentalCost${index}" min="0" value="0" 
+                           title="Enter the cost of this incidental. Example: If stamps cost $0.05 per carton, enter 0.05 and choose 'Per Carton'. Or $5 for ink every 100 cartons, enter 5 and choose 'Per 100 Cartons'.">
+                    <select id="customIncidentalUnit${index}" 
+                            title="Choose how this cost is measured—per single carton (e.g., $0.05/carton), per 10 cartons, or per 100 cartons.">
+                        <option value="perCarton">Per Carton</option>
+                        <option value="per10">Per 10 Cartons</option>
+                        <option value="per100">Per 100 Cartons</option>
+                    </select><br>
+                </div>
+            `;
+        }
+
         function calculatePrice() {
             const initialCost = parseFloat(document.getElementById('initialCost').value) || 0;
             const chickenCount = parseInt(document.getElementById('chickenCount').value) || 1;
@@ -441,9 +458,15 @@
 
             const ongoingCostPerEgg = totalEggsPerWeek > 0 ? totalOngoingWeekly / totalEggsPerWeek : 0;
             const cartonCost = convertCartonCost('cartonCost', 'cartonUnit');
-            const stampCost = convertCartonCost('stampCost', 'stampUnit');
-            const incidentalCostPerEgg = (cartonCost + stampCost) / 12;
+            let totalIncidentalCost = cartonCost;
 
+            for (let i = 0; i < customIncidentalCount; i++) {
+                if (document.getElementById(`customIncidentalCost${i}`)) {
+                    totalIncidentalCost += convertCartonCost(`customIncidentalCost${i}`, `customIncidentalUnit${i}`);
+                }
+            }
+
+            const incidentalCostPerEgg = totalIncidentalCost / 12;
             const totalCostPerEgg = initialCostPerEgg + chickenCostPerEgg + ongoingCostPerEgg + incidentalCostPerEgg;
             const costPerDozen = totalCostPerEgg * 12;
             const profitMargin = (parseFloat(document.getElementById('profitMargin').value) || 19) / 100;
@@ -499,8 +522,11 @@
                 })),
                 cartonCost: document.getElementById('cartonCost').value,
                 cartonUnit: document.getElementById('cartonUnit').value,
-                stampCost: document.getElementById('stampCost').value,
-                stampUnit: document.getElementById('stampUnit').value,
+                customIncidentals: Array.from({ length: customIncidentalCount }, (_, i) => ({
+                    name: document.getElementById(`customIncidentalName${i}`)?.value || '',
+                    cost: document.getElementById(`customIncidentalCost${i}`)?.value || 0,
+                    unit: document.getElementById(`customIncidentalUnit${i}`)?.value || 'perCarton'
+                })),
                 profitMargin: document.getElementById('profitMargin').value
             };
             localStorage.setItem('eggCalculatorData', JSON.stringify(data));
@@ -547,8 +573,12 @@
             });
             document.getElementById('cartonCost').value = data.cartonCost || 0;
             document.getElementById('cartonUnit').value = data.cartonUnit || 'perCarton';
-            document.getElementById('stampCost').value = data.stampCost || 0;
-            document.getElementById('stampUnit').value = data.stampUnit || 'perCarton';
+            data.customIncidentals?.forEach((incidental, i) => {
+                addCustomIncidental();
+                document.getElementById(`customIncidentalName${i}`).value = incidental.name || '';
+                document.getElementById(`customIncidentalCost${i}`).value = incidental.cost || 0;
+                document.getElementById(`customIncidentalUnit${i}`).value = incidental.unit || 'perCarton';
+            });
             document.getElementById('profitMargin').value = data.profitMargin || 19;
         }
 
