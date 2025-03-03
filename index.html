@@ -11,43 +11,43 @@
             margin: 20px;
             transition: background-color 0.3s, color 0.3s;
             background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-            background-color: #fff7d1; /* Egg yolk light */
-            color: #4a2c0a; /* Hen brown */
+            background-color: #fff7d1;
+            color: #4a2c0a;
             overflow-x: hidden;
         }
         .dark-mode {
-            background-color: #1a0f03; /* Midnight coop */
+            background-color: #1a0f03;
             color: #fff7d1;
         }
         .section {
             margin-bottom: 20px;
-            background: rgba(255, 230, 153, 0.9); /* Sunny yolk */
+            background: rgba(255, 230, 153, 0.9);
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            border: 3px dashed #e67300; /* Orange beak */
+            border: 3px dashed #e67300;
             position: relative;
         }
         .dark-mode .section {
-            background: rgba(74, 44, 10, 0.9); /* Dark coop wood */
-            border-color: #ff9900; /* Glowing beak */
+            background: rgba(74, 44, 10, 0.9);
+            border-color: #ff9900;
         }
-        .chicken-entry {
-            border: 3px solid #ff9900; /* Bright beak */
+        .chicken-entry, .custom-expense {
+            border: 3px solid #ff9900;
             padding: 15px;
             margin-bottom: 15px;
             border-radius: 10px;
-            background: #fff0b3; /* Pale egg */
+            background: #fff0b3;
             position: relative;
         }
-        .dark-mode .chicken-entry {
+        .dark-mode .chicken-entry, .dark-mode .custom-expense {
             border-color: #e67300;
             background: #3f2606;
         }
         button {
             padding: 10px 20px;
             margin: 5px;
-            background-color: #ff9900; /* Beak orange */
+            background-color: #ff9900;
             color: #fff7d1;
             border: none;
             border-radius: 8px;
@@ -58,7 +58,7 @@
             text-transform: uppercase;
         }
         button:hover {
-            background-color: #ffcc00; /* Yolk pop */
+            background-color: #ffcc00;
             transform: scale(1.1);
         }
         .dark-mode button {
@@ -67,12 +67,20 @@
         .dark-mode button:hover {
             background-color: #ff9900;
         }
+        .add-button {
+            background-color: #e67300;
+            padding: 5px 10px;
+            font-size: 16px;
+        }
+        .dark-mode .add-button {
+            background-color: #ff9900;
+        }
         label {
             display: inline-block;
             width: 240px;
             font-weight: bold;
-            color: #8c5523; /* Coop brown */
-            font-family: 'Poppins', Arial, sans-serif; /* Cleaner font for labels */
+            color: #8c5523;
+            font-family: 'Poppins', Arial, sans-serif;
         }
         .dark-mode label {
             color: #ffcc00;
@@ -177,16 +185,19 @@
     <div class="section">
         <h2 class="coop-header">🐣 Initial Setup Costs 🏡</h2>
         <label>Initial Investment ($ over flock lifespan):</label>
-        <input type="number" id="initialCost" value="3000" min="0" step="10"><br>
+        <input type="number" id="initialCost" value="3000" min="0" step="10" 
+               title="This is the total cost of everything you bought to get started with your flock—your coop, feeders, waterers, nesting boxes, fencing, etc. Example: If you spent $2,500 on a coop and $500 on supplies, enter 3000."><br>
     </div>
 
     <!-- Chicken Details -->
     <div class="section">
         <h2 class="coop-header">🐓 Chickens 🐓</h2>
         <label>Number of Chickens:</label>
-        <input type="number" id="chickenCount" min="1" value="1" onchange="updateChickenInputs()"><br>
+        <input type="number" id="chickenCount" min="1" value="1" onchange="updateChickenInputs()" 
+               title="How many hens are in your flock? Enter the total number of chickens you’re raising. Example: If you have 3 hens, enter 3."><br>
         <label>Egg Production Unit:</label>
-        <select id="eggUnit" onchange="updateChickenInputs()">
+        <select id="eggUnit" onchange="updateChickenInputs()" 
+                title="Choose how you want to enter egg production—'Per Year' is the industry standard (e.g., 275 eggs/year for a Rhode Island Red), or 'Per Week' if you track it weekly (e.g., 5 eggs/week). Pick what works for you!">
             <option value="year">Per Year</option>
             <option value="week">Per Week</option>
         </select><br>
@@ -196,56 +207,74 @@
     <!-- Ongoing Expenses -->
     <div class="section">
         <h2 class="coop-header">🌾 Ongoing Expenses 🌽</h2>
-        <label>Feed Cost <span class="egg-emoji">🌾</span>:</label>
-        <input type="number" id="feedCost" min="0" value="0">
-        <select id="feedUnit">
-            <option value="week">Per Week</option>
-            <option value="month">Per Month</option>
-            <option value="year">Per Year</option>
-        </select><br>
-        <label>Gravel Cost <span class="egg-emoji">🪨</span>:</label>
-        <input type="number" id="gravelCost" min="0" value="0">
-        <select id="gravelUnit">
-            <option value="week">Per Week</option>
-            <option value="month">Per Month</option>
-            <option value="year">Per Year</option>
-        </select><br>
-        <label>Oyster Shell Cost <span class="egg-emoji">🐚</span>:</label>
-        <input type="number" id="oysterShellCost" min="0" value="0">
-        <select id="oysterShellUnit">
-            <option value="week">Per Week</option>
-            <option value="month">Per Month</option>
-            <option value="year">Per Year</option>
-        </select><br>
-        <label>Nesting Box Pads Cost <span class="egg-emoji">🛏️</span>:</label>
-        <input type="number" id="nestingCost" min="0" value="0">
-        <select id="nestingUnit">
-            <option value="week">Per Week</option>
-            <option value="month">Per Month</option>
-            <option value="year">Per Year</option>
-        </select><br>
-        <label>Coop Lining Cost <span class="egg-emoji">🏠</span>:</label>
-        <input type="number" id="coopLiningCost" min="0" value="0">
-        <select id="coopLiningUnit">
-            <option value="week">Per Week</option>
-            <option value="month">Per Month</option>
-            <option value="year">Per Year</option>
-        </select>
+        <div id="fixedExpenses">
+            <label>Feed Cost <span class="egg-emoji">🌾</span>:</label>
+            <input type="number" id="feedCost" min="0" value="0" 
+                   title="This is how much you spend on chicken feed in the selected time period. Example: If you buy a $20 bag of feed every month, enter 20 and choose 'Per Month'.">
+            <select id="feedUnit" 
+                    title="Select the time period for your feed cost—weekly (e.g., $5/week), monthly (e.g., $20/month), or yearly (e.g., $240/year).">
+                <option value="week">Per Week</option>
+                <option value="month">Per Month</option>
+                <option value="year">Per Year</option>
+            </select><br>
+            <label>Grit Cost <span class="egg-emoji">🪨</span>:</label>
+            <input type="number" id="gritCost" min="0" value="0" 
+                   title="Enter the cost of grit for your hens’ digestion needs (helps them grind food). Example: If you spend $10 on grit every 6 months, enter 10 and choose 'Per Year' (adjust to yearly cost: $20/year).">
+            <select id="gritUnit" 
+                    title="Choose how often you buy grit—weekly, monthly, or yearly. Match this to your grit cost input.">
+                <option value="week">Per Week</option>
+                <option value="month">Per Month</option>
+                <option value="year">Per Year</option>
+            </select><br>
+            <label>Oyster Shell Cost <span class="egg-emoji">🐚</span>:</label>
+            <input type="number" id="oysterShellCost" min="0" value="0" 
+                   title="This is the cost of oyster shell or calcium supplements for strong eggshells. Example: If a $15 bag lasts a year, enter 15 and choose 'Per Year'.">
+            <select id="oysterShellUnit" 
+                    title="Select the time period for your oyster shell cost—weekly, monthly, or yearly.">
+                <option value="week">Per Week</option>
+                <option value="month">Per Month</option>
+                <option value="year">Per Year</option>
+            </select><br>
+            <label>Nesting Box Pads Cost <span class="egg-emoji">🛏️</span>:</label>
+            <input type="number" id="nestingCost" min="0" value="0" 
+                   title="Enter the cost of nesting pads or bedding for the boxes. Example: If you spend $12 every 3 months, enter 12 and choose 'Per Month' (adjust to monthly: $4/month).">
+            <select id="nestingUnit" 
+                    title="Choose how often you replace nesting pads—weekly, monthly, or yearly.">
+                <option value="week">Per Week</option>
+                <option value="month">Per Month</option>
+                <option value="year">Per Year</option>
+            </select><br>
+            <label>Coop Bedding Cost <span class="egg-emoji">🏠</span>:</label>
+            <input type="number" id="coopBeddingCost" min="0" value="0" 
+                   title="This is the cost of bedding for the coop floor (e.g., straw, pine shavings). Example: If you spend $30 every 2 months, enter 30 and choose 'Per Month' (adjust to monthly: $15/month).">
+            <select id="coopBeddingUnit" 
+                    title="Select the time period for your coop bedding cost—weekly, monthly, or yearly.">
+                <option value="week">Per Week</option>
+                <option value="month">Per Month</option>
+                <option value="year">Per Year</option>
+            </select><br>
+        </div>
+        <div id="customExpenses"></div>
+        <button class="add-button" onclick="addCustomExpense()">➕ Add Custom Expense 🐔</button>
     </div>
 
     <!-- Sale Incidentals -->
     <div class="section">
         <h2 class="coop-header">📦 Sale Incidentals 🥚</h2>
         <label>Egg Carton Cost <span class="egg-emoji">📦</span>:</label>
-        <input type="number" id="cartonCost" min="0" value="0">
-        <select id="cartonUnit">
+        <input type="number" id="cartonCost" min="0" value="0" 
+               title="This is what you spend on egg cartons. Example: If you buy cartons at $0.25 each, enter 0.25 and choose 'Per Carton'. Or if $25 for 100, enter 25 and choose 'Per 100 Cartons'.">
+        <select id="cartonUnit" 
+                title="Choose how your carton cost is measured—per single carton, per 10, or per 100 cartons.">
             <option value="perCarton">Per Carton</option>
             <option value="per10">Per 10 Cartons</option>
             <option value="per100">Per 100 Cartons</option>
         </select><br>
         <label>Stamp/Ink Cost <span class="egg-emoji">✒️</span>:</label>
-        <input type="number" id="stampCost" min="0" value="0">
-        <select id="stampUnit">
+        <input type="number" id="stampCost" min="0" value="0" 
+               title="Enter the cost of stamps or ink for labeling cartons. Example: If a stamp costs $0.05 per carton, enter 0.05 and choose 'Per Carton'. Or $5 for ink every 100 cartons, enter 5 and choose 'Per 100 Cartons'.">
+        <select id="stampUnit" 
+                title="Select how your stamp/ink cost is measured—per single carton, per 10, or per 100 cartons.">
             <option value="perCarton">Per Carton</option>
             <option value="per10">Per 10 Cartons</option>
             <option value="per100">Per 100 Cartons</option>
@@ -256,7 +285,8 @@
     <div class="section">
         <h2 class="coop-header">💰 Profit Margin 🤑</h2>
         <label>Desired Profit Margin (%):</label>
-        <input type="number" id="profitMargin" min="0" value="19" step="0.1">
+        <input type="number" id="profitMargin" min="0" value="19" step="0.1" 
+               title="This is how much profit you want to make on top of your costs, as a percentage. Example: Enter 20 for a 20% profit margin, meaning if costs are $5/dozen, you’d sell for $6/dozen. Default is 19%.">
     </div>
 
     <!-- Buttons -->
@@ -285,6 +315,8 @@
             "Custom Breed": { eggsPerYear: 250, lifespan: 4.0 }
         };
 
+        let customExpenseCount = 0;
+
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
             const button = document.getElementById('themeToggle');
@@ -307,19 +339,25 @@
                     <div class="chicken-entry">
                         <h3>Chicken ${i + 1} <span class="chicken-emoji">🐔</span></h3>
                         <label>Name (optional) <span class="egg-emoji">🐣</span>:</label>
-                        <input type="text" id="name${i}" placeholder="e.g., Clucky"><br>
+                        <input type="text" id="name${i}" placeholder="e.g., Clucky" 
+                               title="Give your hen a fun name if you want! This is optional—just for your records. Example: 'Clucky' or 'Featherina'."><br>
                         <label>Breed <span class="chicken-emoji">🐓</span>:</label>
-                        <select id="breed${i}" onchange="updateBreedDefaults(${i})">${breedOptions}</select><br>
+                        <select id="breed${i}" onchange="updateBreedDefaults(${i})" 
+                                title="Pick your hen’s breed from the list. Well-known breeds auto-fill egg rates and lifespans, or choose 'Custom Breed' for your own mix. Example: 'Isa Brown' for a great layer!">${breedOptions}</select><br>
                         <div id="customBreed${i}" style="display: none;">
                             <label>Custom Breed Name <span class="egg-emoji">🥚</span>:</label>
-                            <input type="text" id="customBreedName${i}"><br>
+                            <input type="text" id="customBreedName${i}" 
+                                   title="If you chose 'Custom Breed', enter a name for your unique hen mix here. Example: 'Barnyard Special' for a mixed flock."><br>
                         </div>
                         <label>Cost ($ over lifespan) <span class="egg-emoji">💸</span>:</label>
-                        <input type="number" id="cost${i}" min="0" value="0"><br>
+                        <input type="number" id="cost${i}" min="0" value="0" 
+                               title="This is what you paid for this hen, amortized over her productive life. Example: If you bought her for $25 and she’ll lay for 5 years, enter 25."><br>
                         <label>Egg Production Rate (${eggUnit}) <span class="egg-emoji">🥚</span>:</label>
-                        <input type="number" id="rate${i}" min="0" step="${eggUnit === 'year' ? 1 : 0.1}" value="${defaultRate}"><br>
+                        <input type="number" id="rate${i}" min="0" step="${eggUnit === 'year' ? 1 : 0.1}" value="${defaultRate}" 
+                               title="How many eggs this hen lays in the chosen unit. Example: '300' for 300 eggs/year (Isa Brown), or '5.8' for 5.8 eggs/week. Adjust if your hen’s different!"><br>
                         <label>Productive Lifespan (years) <span class="chicken-emoji">⏳</span>:</label>
-                        <input type="number" id="lifespan${i}" min="0.1" step="0.1" value="${breedData['Leghorn (White)'].lifespan}">
+                        <input type="number" id="lifespan${i}" min="0.1" step="0.1" value="${breedData['Leghorn (White)'].lifespan}" 
+                               title="How many years this hen will lay eggs at her peak. Example: '3.5' for an Isa Brown, or '6' for a hardy Rhode Island Red. Adjust based on your flock!">
                     </div>
                 `;
                 updateBreedDefaults(i);
@@ -342,6 +380,27 @@
                                   breedData[breed].eggsPerYear / 52;
             }
             lifespanInput.value = breedData[breed].lifespan;
+        }
+
+        function addCustomExpense() {
+            const container = document.getElementById('customExpenses');
+            const index = customExpenseCount++;
+            container.innerHTML += `
+                <div class="custom-expense" id="customExpense${index}">
+                    <label>Custom Expense Name <span class="egg-emoji">🐔</span>:</label>
+                    <input type="text" id="customExpenseName${index}" placeholder="e.g., Vet Visits" 
+                           title="Name your custom ongoing expense—anything else your flock needs! Example: 'Vet Visits', 'Electricity', or 'Treats'."><br>
+                    <label>Cost <span class="egg-emoji">💸</span>:</label>
+                    <input type="number" id="customExpenseCost${index}" min="0" value="0" 
+                           title="Enter the cost of this custom expense in the selected time period. Example: If vet visits cost $50 every 6 months, enter 50 and choose 'Per Year' (adjust to yearly: $100/year).">
+                    <select id="customExpenseUnit${index}" 
+                            title="Select the time period for this custom expense—weekly (e.g., $5/week), monthly (e.g., $20/month), or yearly (e.g., $100/year).">
+                        <option value="week">Per Week</option>
+                        <option value="month">Per Month</option>
+                        <option value="year">Per Year</option>
+                    </select><br>
+                </div>
+            `;
         }
 
         function calculatePrice() {
@@ -368,13 +427,19 @@
                 sum + (eggs > 0 ? document.getElementById(`cost${i}`).value / eggs : 0), 0);
 
             const feedCost = convertToWeekly('feedCost', 'feedUnit');
-            const gravelCost = convertToWeekly('gravelCost', 'gravelUnit');
+            const gritCost = convertToWeekly('gritCost', 'gritUnit');
             const oysterShellCost = convertToWeekly('oysterShellCost', 'oysterShellUnit');
             const nestingCost = convertToWeekly('nestingCost', 'nestingUnit');
-            const coopLiningCost = convertToWeekly('coopLiningCost', 'coopLiningUnit');
-            const totalOngoingWeekly = feedCost + gravelCost + oysterShellCost + nestingCost + coopLiningCost;
-            const ongoingCostPerEgg = totalEggsPerWeek > 0 ? totalOngoingWeekly / totalEggsPerWeek : 0;
+            const coopBeddingCost = convertToWeekly('coopBeddingCost', 'coopBeddingUnit');
+            let totalOngoingWeekly = feedCost + gritCost + oysterShellCost + nestingCost + coopBeddingCost;
 
+            for (let i = 0; i < customExpenseCount; i++) {
+                if (document.getElementById(`customExpenseCost${i}`)) {
+                    totalOngoingWeekly += convertToWeekly(`customExpenseCost${i}`, `customExpenseUnit${i}`);
+                }
+            }
+
+            const ongoingCostPerEgg = totalEggsPerWeek > 0 ? totalOngoingWeekly / totalEggsPerWeek : 0;
             const cartonCost = convertCartonCost('cartonCost', 'cartonUnit');
             const stampCost = convertCartonCost('stampCost', 'stampUnit');
             const incidentalCostPerEgg = (cartonCost + stampCost) / 12;
@@ -419,14 +484,19 @@
                 })),
                 feedCost: document.getElementById('feedCost').value,
                 feedUnit: document.getElementById('feedUnit').value,
-                gravelCost: document.getElementById('gravelCost').value,
-                gravelUnit: document.getElementById('gravelUnit').value,
+                gritCost: document.getElementById('gritCost').value,
+                gritUnit: document.getElementById('gritUnit').value,
                 oysterShellCost: document.getElementById('oysterShellCost').value,
                 oysterShellUnit: document.getElementById('oysterShellUnit').value,
                 nestingCost: document.getElementById('nestingCost').value,
                 nestingUnit: document.getElementById('nestingUnit').value,
-                coopLiningCost: document.getElementById('coopLiningCost').value,
-                coopLiningUnit: document.getElementById('coopLiningUnit').value,
+                coopBeddingCost: document.getElementById('coopBeddingCost').value,
+                coopBeddingUnit: document.getElementById('coopBeddingUnit').value,
+                customExpenses: Array.from({ length: customExpenseCount }, (_, i) => ({
+                    name: document.getElementById(`customExpenseName${i}`)?.value || '',
+                    cost: document.getElementById(`customExpenseCost${i}`)?.value || 0,
+                    unit: document.getElementById(`customExpenseUnit${i}`)?.value || 'week'
+                })),
                 cartonCost: document.getElementById('cartonCost').value,
                 cartonUnit: document.getElementById('cartonUnit').value,
                 stampCost: document.getElementById('stampCost').value,
@@ -461,14 +531,20 @@
             });
             document.getElementById('feedCost').value = data.feedCost || 0;
             document.getElementById('feedUnit').value = data.feedUnit || 'week';
-            document.getElementById('gravelCost').value = data.gravelCost || 0;
-            document.getElementById('gravelUnit').value = data.gravelUnit || 'week';
+            document.getElementById('gritCost').value = data.gritCost || 0;
+            document.getElementById('gritUnit').value = data.gritUnit || 'week';
             document.getElementById('oysterShellCost').value = data.oysterShellCost || 0;
             document.getElementById('oysterShellUnit').value = data.oysterShellUnit || 'week';
             document.getElementById('nestingCost').value = data.nestingCost || 0;
             document.getElementById('nestingUnit').value = data.nestingUnit || 'week';
-            document.getElementById('coopLiningCost').value = data.coopLiningCost || 0;
-            document.getElementById('coopLiningUnit').value = data.coopLiningUnit || 'week';
+            document.getElementById('coopBeddingCost').value = data.coopBeddingCost || 0;
+            document.getElementById('coopBeddingUnit').value = data.coopBeddingUnit || 'week';
+            data.customExpenses?.forEach((expense, i) => {
+                addCustomExpense();
+                document.getElementById(`customExpenseName${i}`).value = expense.name || '';
+                document.getElementById(`customExpenseCost${i}`).value = expense.cost || 0;
+                document.getElementById(`customExpenseUnit${i}`).value = expense.unit || 'week';
+            });
             document.getElementById('cartonCost').value = data.cartonCost || 0;
             document.getElementById('cartonUnit').value = data.cartonUnit || 'perCarton';
             document.getElementById('stampCost').value = data.stampCost || 0;
@@ -476,7 +552,6 @@
             document.getElementById('profitMargin').value = data.profitMargin || 19;
         }
 
-        // Initialize
         window.onload = () => {
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'dark') {
