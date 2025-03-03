@@ -32,7 +32,7 @@
             background: rgba(74, 44, 10, 0.9);
             border-color: #ff9900;
         }
-        button {
+        button, a.nav-button {
             padding: 10px 20px;
             margin: 5px;
             background-color: #ff9900;
@@ -44,15 +44,17 @@
             font-size: 18px;
             font-weight: bold;
             text-transform: uppercase;
+            text-decoration: none;
+            display: inline-block;
         }
-        button:hover {
+        button:hover, a.nav-button:hover {
             background-color: #ffcc00;
             transform: scale(1.1);
         }
-        .dark-mode button {
+        .dark-mode button, .dark-mode a.nav-button {
             background-color: #e67300;
         }
-        .dark-mode button:hover {
+        .dark-mode button:hover, .dark-mode a.nav-button:hover {
             background-color: #ff9900;
         }
         label {
@@ -187,6 +189,7 @@
     </div>
 
     <button onclick="calculateChickenMath()">🐔 Do the Chicken Math! 🐓</button>
+    <a href="eggmath.html" class="nav-button">🐣 Egg Price Calculator 🥚</a>
 
     <div class="section">
         <h2 class="coop-header">🎉 Your Chicken Math Total 🐤</h2>
@@ -227,7 +230,7 @@
 
             const chickenMathTotal = inputs.reduce((sum, count) => {
                 const multiplied = count * getRandomMultiplier();
-                return sum + Math.ceil(multiplied); // Round up to the nearest whole chicken
+                return sum + Math.ceil(multiplied);
             }, 0);
 
             document.getElementById('result').textContent = chickenMathTotal;
