@@ -313,6 +313,11 @@
         let customExpenseCount = 0;
         let customIncidentalCount = 0;
 
+        function parseInput(input, defaultValue) {
+            const value = parseFloat(input);
+            return input === '' || isNaN(value) ? defaultValue : value;
+        }
+
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
             const button = document.getElementById('themeToggle');
@@ -322,7 +327,7 @@
         }
 
         function updateChickenInputs() {
-            const count = parseInt(document.getElementById('chickenCount').value) || 1;
+            const count = parseInput(document.getElementById('chickenCount').value, 1);
             const eggUnit = document.getElementById('eggUnit').value;
             const container = document.getElementById('chickenInputs');
             container.innerHTML = '';
@@ -421,27 +426,28 @@
         }
 
         function calculatePrice() {
-            const initialCost = parseFloat(document.getElementById('initialCost').value) || 0;
-            const chickenCount = parseInt(document.getElementById('chickenCount').value) || 1;
+            const initialCost = parseInput(document.getElementById('initialCost').value, 0);
+            const chickenCount = parseInput(document.getElementById('chickenCount').value, 1);
             const eggUnit = document.getElementById('eggUnit').value;
             let totalEggsPerWeek = 0;
             let maxLifespan = 0;
             const chickenEggsOverLifespan = [];
 
             for (let i = 0; i < chickenCount; i++) {
-                const cost = parseFloat(document.getElementById(`cost${i}`).value) || 0;
-                let rate = parseFloat(document.getElementById(`rate${i}`).value) || 0;
-                const lifespan = parseFloat(document.getElementById(`lifespan${i}`).value) || 0;
-                rate = eggUnit === 'year' ? rate / 52 : rate;
-                totalEggsPerWeek += rate;
+                const cost = parseInput(document.getElementById(`cost${i}`).value, 0);
+                const rateInput = document.getElementById(`rate${i}`).value;
+                const rate = parseInput(rateInput, eggUnit === 'year' ? breedData['Leghorn (White)'].eggsPerYear : breedData['Leghorn (White)'].eggsPerYear / 52);
+                const lifespan = parseInput(document.getElementById(`lifespan${i}`).value, breedData['Leghorn (White)'].lifespan);
+                const weeklyRate = eggUnit === 'year' ? rate / 52 : rate;
+                totalEggsPerWeek += weeklyRate;
                 maxLifespan = Math.max(maxLifespan, lifespan);
-                chickenEggsOverLifespan.push(rate * 52 * lifespan);
+                chickenEggsOverLifespan.push(weeklyRate * 52 * lifespan);
             }
 
             const totalEggsFlockLifespan = totalEggsPerWeek * 52 * maxLifespan;
             const initialCostPerEgg = totalEggsFlockLifespan > 0 ? initialCost / totalEggsFlockLifespan : 0;
             const chickenCostPerEgg = chickenEggsOverLifespan.reduce((sum, eggs, i) => 
-                sum + (eggs > 0 ? document.getElementById(`cost${i}`).value / eggs : 0), 0);
+                sum + (eggs > 0 ? parseInput(document.getElementById(`cost${i}`).value, 0) / eggs : 0), 0);
 
             const feedCost = convertToWeekly('feedCost', 'feedUnit');
             const gritCost = convertToWeekly('gritCost', 'gritUnit');
@@ -477,7 +483,7 @@
         }
 
         function convertToWeekly(costId, unitId) {
-            const cost = parseFloat(document.getElementById(costId).value) || 0;
+            const cost = parseInput(document.getElementById(costId).value, 0);
             const unit = document.getElementById(unitId).value;
             if (unit === 'month') return cost / 4.33;
             if (unit === 'year') return cost / 52;
@@ -485,7 +491,7 @@
         }
 
         function convertCartonCost(costId, unitId) {
-            const cost = parseFloat(document.getElementById(costId).value) || 0;
+            const cost = parseInput(document.getElementById(costId).value, 0);
             const unit = document.getElementById(unitId).value;
             if (unit === 'per10') return cost / 10;
             if (unit === 'per100') return cost / 100;
